@@ -39,7 +39,7 @@ export default function Header() {
           <button
             className="btn btn-primary"
             onClick={() => {
-              navigate("/");
+              navigate("/EstimateProduction");
             }}
           >
             Estimate production

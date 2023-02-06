@@ -19,11 +19,11 @@ export default function RegisterRawMaterial() {
     <div className="mb-3">
       <Header />
       <div className="container">
-        <h3>Register Raw Material</h3>
+        <h3>Cadastrar Matéria Prima</h3>
         <form className="row g-3" onSubmit={handleSubmit}>
           <div className="col-md-4">
             <label htmlFor="inputRawMaterial" className="formLabel">
-              Name
+              Nome
             </label>
             <input
               value={formContent.rawMaterial}
@@ -36,13 +36,13 @@ export default function RegisterRawMaterial() {
               type="text"
               className="form-control"
               id="inputRawMaterial"
-              placeholder="Name of the raw material"
+              placeholder="Nome da matéria prima"
               required
             />
           </div>
           <div className="col-md-4">
             <label htmlFor="inputRawMaterialStocked" className="formLabel">
-              Quantity in stock
+              Quantidade em estoque
             </label>
             <input
               value={formContent.rawMaterialStocked}
@@ -55,13 +55,13 @@ export default function RegisterRawMaterial() {
               type="number"
               className="form-control"
               id="inputRawMaterialStocked"
-              placeholder="Quantity of raw material in stock"
+              placeholder="Quantidade de matéria prima em estoque"
               required
             />
           </div>
           <div className="col-12">
             <button type="submit" className="btn btn-primary">
-              Submit
+              Cadastrar
             </button>
           </div>
         </form>

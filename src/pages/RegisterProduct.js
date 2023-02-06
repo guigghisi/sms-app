@@ -1,89 +1,162 @@
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../service/api";
 
 export default function RegisterProduct() {
   const [formContent, setFormContent] = useState({});
-  const [rawMaterials, setRawMaterials] = useState([]);
+  const [rawMaterialsApi, setRawMaterialsApiApi] = useState([]);
+  const [rawMaterial, setRawMaterial] = useState([]);
 
   useEffect(() => {
     api
       .get("/raw-materials")
-      .then((response) => setRawMaterials(response.data));
+      .then((response) => setRawMaterialsApiApi(response.data));
   }, []);
+
+  useEffect(() => {
+    document.querySelector("#tableRawMaterial").innerHTML = `
+        <tr>
+            <th>Matéria prima</th>
+            <th>Quantidade</th>
+        </tr>
+        `;
+    rawMaterial.map((rawMaterial) => {
+      document.querySelector("#tableRawMaterial").innerHTML += `
+        <tr>
+            <td>${rawMaterial.name}</td>
+            <td>${rawMaterial.quantity}</td>
+        </tr>
+        `;
+    });
+  }, [rawMaterial]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    let rawMaterials = [];
+    rawMaterial.map((rawMaterial) => {
+      for (let i = 0; i < rawMaterial.quantity; i++) {
+        rawMaterials.push({
+          id: rawMaterial.id,
+          name: rawMaterial.name,
+        });
+      }
+    });
+    api.post("/products", {
+      name: formContent.productName,
+      price: formContent.productPrice,
+      rawMaterials: rawMaterials,
+    });
   };
   return (
     <div className="mb-3">
       <Header />
       <div className="container">
-        <h3>Register Product</h3>
-        <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-md-3">
-            <label htmlFor="inputProductName" className="formLabel">
-              Name
-            </label>
-            <input
-              value={formContent.productName}
-              onChange={(event) => {
-                setFormContent((prevState) => ({
-                  ...prevState,
-                  productName: event.target.value,
-                }));
-              }}
-              type="text"
-              className="form-control"
-              id="inputProductName"
-              placeholder="Name of the product"
-              required
-            />
-          </div>
-          <div className="col-md-2">
-            <label htmlFor="inputProductPrice" className="formLabel">
-              Price
-            </label>
-            <input
-              value={formContent.productPrice}
-              onChange={(event) => {
-                setFormContent((prevState) => ({
-                  ...prevState,
-                  productPrice: event.target.value,
-                }));
-              }}
-              type="text"
-              className="form-control"
-              id="inputProductPrice"
-              placeholder="Price of the product"
-              required
-            />
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="selectRawMaterial" className="formLabel">
-              Raw Material
-            </label>
-            <div
-              className="input-group mb-3
+        <div className="flex">
+          <h3>Cadastrar Produto</h3>
+          <form className="row g-3" onSubmit={handleSubmit}>
+            <div className="col-md-3">
+              <label htmlFor="inputProductName" className="formLabel">
+                Nome
+              </label>
+              <input
+                value={formContent.productName}
+                onChange={(event) => {
+                  setFormContent((prevState) => ({
+                    ...prevState,
+                    productName: event.target.value,
+                  }));
+                }}
+                type="text"
+                className="form-control"
+                id="inputProductName"
+                placeholder="Nome do produto"
+                required
+              />
+            </div>
+            <div className="col-md-2">
+              <label htmlFor="inputProductPrice" className="formLabel">
+                Preço
+              </label>
+              <input
+                value={formContent.productPrice}
+                onChange={(event) => {
+                  setFormContent((prevState) => ({
+                    ...prevState,
+                    productPrice: event.target.value,
+                  }));
+                }}
+                type="text"
+                className="form-control"
+                id="inputProductPrice"
+                placeholder="R$"
+                required
+              />
+            </div>
+
+            <div className="col-md-5">
+              <label htmlFor="selectRawMaterial" className="formLabel">
+                Matéria Prima
+              </label>
+              <div
+                className="input-group col-md-4
            "
-            >
-              <select
-                className="form-select "
-                aria-label="Default select example"
               >
-                <option selected>Open this select menu</option>
-                <option value="1">Raw Material 1</option>
-                <option value="2">Raw Material 2</option>
-                <option value="3">Raw Material 3</option>
+                <select
+                  className="form-select "
+                  id="selectRawMaterial"
+                  aria-label="Default select example"
+                >
+                  <option selected>Selecione uma matéria prima</option>
+                  {rawMaterialsApi.map((rawMaterial) => (
+                    <option value={rawMaterial.id}>{rawMaterial.name}</option>
+                  ))}
+                </select>
                 <input
                   type="number"
-                  className="form-control col-md-1"
-                  placeholder="Quantity"
+                  className="form-control"
+                  id="inputRawMaterialQuantity"
+                  placeholder="Quantidade"
                 />
-              </select>
-              <input className="form-control" />
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  id="button-addon2"
+                  onClick={() => {
+                    setRawMaterial((prevState) => [
+                      ...prevState,
+                      {
+                        id: document.querySelector("#selectRawMaterial").value,
+                        name: document.querySelector(
+                          "#selectRawMaterial option:checked"
+                        ).innerText,
+                        quantity: document.querySelector(
+                          "#inputRawMaterialQuantity"
+                        ).value,
+                      },
+                    ]);
+                  }}
+                >
+                  Adicionar
+                </button>
+                <div>
+                  <button type="submit" className="btn btn-primary">
+                    Cadastrar
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+
+          <table className="table" id="tableRawMaterial">
+            <thead>
+              <tr>
+                <th scope="col">Matéria prima</th>
+                <th scope="col">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
