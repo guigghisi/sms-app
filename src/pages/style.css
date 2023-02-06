@@ -1,0 +1,14 @@
+.formLabel {
+    margin-top: 0.5rem;
+}
+
+body {
+    background-image: url("https://static.vecteezy.com/system/resources/previews/006/430/145/original/technology-background-concept-circuit-board-electronic-system-futuristic-hi-tech-light-on-dark-blue-free-vector.jpg");
+}
+
+.container {
+    background-color: rgba(240, 248, 255, 0.904);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
