@@ -5,7 +5,11 @@ export default function Home() {
   return (
     <div className="mb-3">
       <Header />
-      <div></div>
+      <div className="flex-row">
+        <div className="container">
+          <h1>Home</h1>
+        </div>
+      </div>
     </div>
   );
 }

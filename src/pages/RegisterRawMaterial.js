@@ -16,12 +16,15 @@ export default function RegisterRawMaterial() {
       .then((response) => console.log(response));
   };
   return (
-    <div className="mb-3">
+    <div>
       <Header />
       <div className="container">
         <h3>Cadastrar Matéria Prima</h3>
-        <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-md-4">
+        <form
+          className="row row-cols-lg-auto g-3 align-items-end justify-content-center"
+          onSubmit={handleSubmit}
+        >
+          <div className="col-12">
             <label htmlFor="inputRawMaterial" className="formLabel">
               Nome
             </label>
@@ -40,7 +43,7 @@ export default function RegisterRawMaterial() {
               required
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-12">
             <label htmlFor="inputRawMaterialStocked" className="formLabel">
               Quantidade em estoque
             </label>
@@ -60,8 +63,13 @@ export default function RegisterRawMaterial() {
             />
           </div>
           <div className="col-12">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-success">
               Cadastrar
+            </button>
+          </div>
+          <div className="col-12">
+            <button type="reset" className="btn btn-secondary">
+              Limpar
             </button>
           </div>
         </form>
