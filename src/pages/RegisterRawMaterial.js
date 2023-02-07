@@ -8,21 +8,21 @@ export default function RegisterRawMaterial() {
   const [rawMaterials, setRawMaterials] = useState([]);
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-
     api
       .post("/raw-materials", {
         name: formContent.rawMaterialName,
         stocked: formContent.rawMaterialStocked,
       })
       .then((response) => console.log(response));
+    document.querySelector("#inputRawMaterial").value = "";
+    document.querySelector("#inputRawMaterialStocked").value = 0;
   };
 
   useEffect(() => {
     api
       .get("/raw-materials")
       .then((response) => setRawMaterials(response.data));
-  }, [rawMaterials]);
+  }, []);
   return (
     <div>
       <Header />

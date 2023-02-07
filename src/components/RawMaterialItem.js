@@ -13,9 +13,19 @@ export default function RawMaterialItem(props) {
       confirmButtonText: "Sim, excluir!",
     }).then((result) => {
       if (result.isConfirmed) {
-        api.delete(`/raw-materials/${props.prop.id}`).then(() => {
-          Swal.fire("Excluído!", "A matéria prima foi excluída.", "success");
-        });
+        api
+          .delete(`/raw-materials/${props.prop.id}`)
+          .then(() => {
+            Swal.fire("Excluído!", "A matéria prima foi excluída.", "success");
+            window.location.reload();
+          })
+          .catch((err) => {
+            Swal.fire(
+              "Erro!",
+              "A matéria prima não pode ser excluída, pois ela está em uso em algum produto.",
+              "error"
+            );
+          });
       }
     });
   }
@@ -38,6 +48,7 @@ export default function RawMaterialItem(props) {
           stocked: result.value[1],
         });
       }
+      window.location.reload();
     });
   }
   return (

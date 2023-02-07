@@ -1,11 +1,13 @@
 import Header from "../components/Header";
 import React, { useEffect, useState } from "react";
 import api from "../service/api";
+import ProductItem from "../components/ProductItem";
 
 export default function RegisterProduct() {
   const [formContent, setFormContent] = useState({});
   const [rawMaterialsApi, setRawMaterialsApi] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
+  const [product, setProduct] = useState([]);
 
   useEffect(() => {
     api
@@ -14,24 +16,9 @@ export default function RegisterProduct() {
   }, []);
 
   useEffect(() => {
-    document.querySelector("#tableRawMaterial").innerHTML = `
-        <tr>
-            <th>Matéria prima</th>
-            <th>Quantidade</th>
-        </tr>
-        `;
-    rawMaterial.map((rawMaterial) => {
-      document.querySelector("#tableRawMaterial").innerHTML += `
-        <tr>
-            <td>${rawMaterial.name}</td>
-            <td>${rawMaterial.quantity}</td>
-        </tr>
-        `;
-    });
-  }, [rawMaterial]);
-
+    api.get("/products").then((response) => setProduct(response.data));
+  }, []);
   const handleSubmit = (event) => {
-    event.preventDefault();
     let rawMaterials = [];
     rawMaterial.map((rawMaterial) => {
       for (let i = 0; i < rawMaterial.quantity; i++) {
@@ -46,6 +33,11 @@ export default function RegisterProduct() {
       price: formContent.productPrice,
       rawMaterials: rawMaterials,
     });
+    setRawMaterial([]);
+    document.querySelector("#inputProductName").value = "";
+    document.querySelector("#inputProductPrice").value = 0;
+    document.querySelector("#selectRawMaterial").value = 0;
+    document.querySelector("#inputRawMaterialQuantity").value = "";
   };
   return (
     <div className="mb-3">
@@ -132,9 +124,7 @@ export default function RegisterProduct() {
                 type="button"
                 id="button-addon2"
                 onClick={() => {
-                  if (
-                    document.querySelector("#selectRawMaterial").value === 0
-                  ) {
+                  if (document.querySelector("#selectRawMaterial").value == 0) {
                     alert("Selecione uma matéria prima");
                   } else {
                     setRawMaterial((prevState) => [
@@ -152,7 +142,7 @@ export default function RegisterProduct() {
                   }
                 }}
               >
-                Adicionar
+                Adicionar Matéria
               </button>
             </div>
           </div>
@@ -173,16 +163,31 @@ export default function RegisterProduct() {
             </button>
           </div>
         </form>
-
-        <table className="table" id="tableRawMaterial">
-          <thead>
-            <tr>
-              <th scope="col">Matéria prima</th>
-              <th scope="col">Quantidade</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <br />
+        <div className="row">
+          <div className="col-6">
+            <p>
+              <b>Matéria prima</b>{" "}
+            </p>
+          </div>
+          <div className="col-6">
+            <p>
+              <b>Quantidade</b>
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-6">
+            {rawMaterial.map((rawMaterial) => (
+              <p>{rawMaterial.name}</p>
+            ))}
+          </div>
+          <div className="col-6">
+            {rawMaterial.map((rawMaterial) => (
+              <p>{rawMaterial.quantity}</p>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="container">
         <h3>Produtos</h3>
@@ -198,6 +203,9 @@ export default function RegisterProduct() {
               <h4>Ações</h4>
             </div>
           </div>
+          {product.map((product) => (
+            <ProductItem prop={product} />
+          ))}
         </div>
       </div>
     </div>
