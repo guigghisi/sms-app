@@ -32,7 +32,7 @@ export default function EstimateProduction() {
             <tr>
                 <td>${product.name}</td>
                 <td>${product.count}</td>
-                <td>${product.price}</td>
+                <td>R$${product.price}</td>
             </tr>
             `;
       });

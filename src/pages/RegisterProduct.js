@@ -4,13 +4,13 @@ import api from "../service/api";
 
 export default function RegisterProduct() {
   const [formContent, setFormContent] = useState({});
-  const [rawMaterialsApi, setRawMaterialsApiApi] = useState([]);
+  const [rawMaterialsApi, setRawMaterialsApi] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
 
   useEffect(() => {
     api
       .get("/raw-materials")
-      .then((response) => setRawMaterialsApiApi(response.data));
+      .then((response) => setRawMaterialsApi(response.data));
   }, []);
 
   useEffect(() => {
@@ -53,12 +53,12 @@ export default function RegisterProduct() {
       <div className="container">
         <h3>Cadastrar Produto</h3>
         <form
-          className="row row-cols-lg-auto g-3 align-items-center"
+          className="row row-cols-lg-auto g-3 align-items-end"
           onSubmit={handleSubmit}
         >
           <div className="col-12">
             <label htmlFor="inputProductName" className="formLabel">
-              Nome
+              Produto
             </label>
             <input
               value={formContent.productName}
@@ -84,10 +84,10 @@ export default function RegisterProduct() {
               onChange={(event) => {
                 setFormContent((prevState) => ({
                   ...prevState,
-                  productPrice: event.target.value,
+                  productPrice: Math.max(0, event.target.value),
                 }));
               }}
-              type="text"
+              type="number"
               className="form-control"
               id="inputProductPrice"
               placeholder="R$"
@@ -108,7 +108,9 @@ export default function RegisterProduct() {
                 id="selectRawMaterial"
                 aria-label="Default select example"
               >
-                <option selected>Selecione uma matéria prima</option>
+                <option selected value={0}>
+                  Selecione uma matéria prima
+                </option>
                 {rawMaterialsApi.map((rawMaterial) => (
                   <option value={rawMaterial.id}>{rawMaterial.name}</option>
                 ))}
@@ -118,6 +120,11 @@ export default function RegisterProduct() {
                 className="form-control"
                 id="inputRawMaterialQuantity"
                 placeholder="Quantidade"
+                onChange={(event) => {
+                  if (event.target.value < 0) {
+                    event.target.value = 0;
+                  }
+                }}
               />
 
               <button
@@ -125,18 +132,24 @@ export default function RegisterProduct() {
                 type="button"
                 id="button-addon2"
                 onClick={() => {
-                  setRawMaterial((prevState) => [
-                    ...prevState,
-                    {
-                      id: document.querySelector("#selectRawMaterial").value,
-                      name: document.querySelector(
-                        "#selectRawMaterial option:checked"
-                      ).innerText,
-                      quantity: document.querySelector(
-                        "#inputRawMaterialQuantity"
-                      ).value,
-                    },
-                  ]);
+                  if (
+                    document.querySelector("#selectRawMaterial").value === 0
+                  ) {
+                    alert("Selecione uma matéria prima");
+                  } else {
+                    setRawMaterial((prevState) => [
+                      ...prevState,
+                      {
+                        id: document.querySelector("#selectRawMaterial").value,
+                        name: document.querySelector(
+                          "#selectRawMaterial option:checked"
+                        ).innerText,
+                        quantity: document.querySelector(
+                          "#inputRawMaterialQuantity"
+                        ).value,
+                      },
+                    ]);
+                  }
                 }}
               >
                 Adicionar
@@ -170,6 +183,22 @@ export default function RegisterProduct() {
           </thead>
           <tbody></tbody>
         </table>
+      </div>
+      <div className="container">
+        <h3>Produtos</h3>
+        <div className="container">
+          <div className="row">
+            <div className="col-4">
+              <h4>Produto</h4>
+            </div>
+            <div className="col-4">
+              <h4>Preço</h4>
+            </div>
+            <div className="col-4">
+              <h4>Ações</h4>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

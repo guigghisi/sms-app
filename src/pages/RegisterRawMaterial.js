@@ -1,9 +1,11 @@
 import Header from "../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../service/api";
+import RawMaterialItem from "../components/RawMaterialItem";
 
 export default function RegisterRawMaterial() {
   const [formContent, setFormContent] = useState({});
+  const [rawMaterials, setRawMaterials] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -15,6 +17,12 @@ export default function RegisterRawMaterial() {
       })
       .then((response) => console.log(response));
   };
+
+  useEffect(() => {
+    api
+      .get("/raw-materials")
+      .then((response) => setRawMaterials(response.data));
+  }, [rawMaterials]);
   return (
     <div>
       <Header />
@@ -26,7 +34,7 @@ export default function RegisterRawMaterial() {
         >
           <div className="col-12">
             <label htmlFor="inputRawMaterial" className="formLabel">
-              Nome
+              Matéria prima
             </label>
             <input
               value={formContent.rawMaterial}
@@ -52,7 +60,7 @@ export default function RegisterRawMaterial() {
               onChange={(event) => {
                 setFormContent((prevState) => ({
                   ...prevState,
-                  rawMaterialStocked: event.target.value,
+                  rawMaterialStocked: Math.max(0, event.target.value),
                 }));
               }}
               type="number"
@@ -73,6 +81,25 @@ export default function RegisterRawMaterial() {
             </button>
           </div>
         </form>
+      </div>
+      <div className="container">
+        <h3>Matérias Primas</h3>
+        <div className="container">
+          <div className="row">
+            <div className="col-4">
+              <h4>Matéria prima</h4>
+            </div>
+            <div className="col-4">
+              <h4>Quantidade em estoque</h4>
+            </div>
+            <div className="col-4">
+              <h4>Ações</h4>
+            </div>
+          </div>
+          {rawMaterials.map((rawMaterial) => (
+            <RawMaterialItem prop={rawMaterial} />
+          ))}
+        </div>
       </div>
     </div>
   );

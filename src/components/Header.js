@@ -26,7 +26,7 @@ export default function Header() {
               navigate("/RegisterProduct");
             }}
           >
-            Register Product
+            Produto
           </button>
           <button
             className="btn btn-primary"
@@ -34,7 +34,7 @@ export default function Header() {
               navigate("/RegisterRawMaterial");
             }}
           >
-            Register Raw Material
+            Matéria Prima
           </button>
           <button
             className="btn btn-primary"
@@ -42,7 +42,7 @@ export default function Header() {
               navigate("/EstimateProduction");
             }}
           >
-            Estimate production
+            Estimar produção
           </button>
         </div>
       </div>
