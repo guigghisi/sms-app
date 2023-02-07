@@ -19,31 +19,38 @@ export default function Header() {
             sms
           </span>
         </div>
-        <div>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              navigate("/RegisterProduct");
-            }}
-          >
-            Produto
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              navigate("/RegisterRawMaterial");
-            }}
-          >
-            Matéria Prima
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              navigate("/EstimateProduction");
-            }}
-          >
-            Estimar produção
-          </button>
+        <div className="row">
+          <div className="col-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                navigate("/RegisterProduct");
+              }}
+            >
+              Produto
+            </button>
+          </div>
+
+          <div className="col-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                navigate("/RegisterRawMaterial");
+              }}
+            >
+              Materiais
+            </button>
+          </div>
+          <div className="col-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                navigate("/EstimateProduction");
+              }}
+            >
+              Produção
+            </button>
+          </div>
         </div>
       </div>
     </nav>
